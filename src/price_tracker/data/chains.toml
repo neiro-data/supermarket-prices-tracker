@@ -1,0 +1,150 @@
+# Supported chains. Add a country by adding rows with its country_code.
+
+[[chains]]
+code = "rewe"
+name = "REWE"
+country_code = "DE"
+parser_profile = "rewe"
+detect_keywords = ["rewe"]
+
+[[chains]]
+code = "lidl"
+name = "Lidl"
+country_code = "DE"
+parser_profile = "lidl"
+detect_keywords = ["lidl"]
+
+[[chains]]
+code = "aldi_sued"
+name = "ALDI SÜD"
+country_code = "DE"
+parser_profile = "aldi"
+detect_keywords = ["aldi sued", "aldi süd"]
+
+[[chains]]
+code = "aldi_nord"
+name = "ALDI Nord"
+country_code = "DE"
+parser_profile = "aldi"
+detect_keywords = ["aldi nord"]
+
+[[chains]]
+code = "edeka"
+name = "EDEKA"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["edeka"]
+
+[[chains]]
+code = "kaufland"
+name = "Kaufland"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["kaufland"]
+
+[[chains]]
+code = "penny"
+name = "PENNY"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["penny"]
+
+[[chains]]
+code = "netto"
+name = "Netto"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["netto marken-discount", "netto"]
+
+[[chains]]
+code = "dm"
+name = "dm-drogerie markt"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["dm-drogerie", "dm drogerie"]
+
+[[chains]]
+code = "rossmann"
+name = "Rossmann"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["rossmann"]
+
+# Portugal (generic profile unless noted; unverified against real receipts)
+
+[[chains]]
+code = "continente"
+name = "Continente"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["continente"]
+
+[[chains]]
+code = "pingo_doce"
+name = "Pingo Doce"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["pingo doce"]
+
+[[chains]]
+code = "auchan_pt"
+name = "Auchan"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["auchan"]
+
+[[chains]]
+code = "intermarche_pt"
+name = "Intermarché"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["intermarche", "intermarché"]
+
+[[chains]]
+code = "minipreco"
+name = "Minipreço"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["minipreco", "minipreço"]
+
+[[chains]]
+code = "mercadona_pt"
+name = "Mercadona"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["mercadona"]
+
+[[chains]]
+code = "lidl_pt"
+name = "Lidl Portugal"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["lidl portugal", "lidl-portugal"]
+
+[[chains]]
+code = "aldi_pt"
+name = "ALDI Portugal"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["aldi portugal"]
+
+[[chains]]
+code = "el_corte_ingles_pt"
+name = "El Corte Inglés"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["el corte ingles", "el corte inglés", "hipercor"]
+
+[[chains]]
+code = "wells"
+name = "Wells"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["wells"]
+
+[[chains]]
+code = "celeiro"
+name = "Celeiro"
+country_code = "PT"
+parser_profile = "generic"
+detect_keywords = ["celeiro"]

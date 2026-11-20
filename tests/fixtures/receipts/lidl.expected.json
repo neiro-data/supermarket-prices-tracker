@@ -1,0 +1,72 @@
+{
+  "chain": "lidl",
+  "profile": "lidl",
+  "purchased_at": "2026-10-12T17:05:00",
+  "total_cents": 529,
+  "city": "Muenchen",
+  "lines": [
+    {
+      "type": "item",
+      "name": "Bananen",
+      "qty_milli": 566,
+      "unit": "kg",
+      "unit_price_cents": 199,
+      "total_cents": 113,
+      "applies_to": null
+    },
+    {
+      "type": "item",
+      "name": "Milbona Joghurt",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": 49,
+      "applies_to": null
+    },
+    {
+      "type": "item",
+      "name": "Milbona Joghurt",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": 49,
+      "applies_to": null
+    },
+    {
+      "type": "item",
+      "name": "Pizza Salami",
+      "qty_milli": 2000,
+      "unit": "pc",
+      "unit_price_cents": 179,
+      "total_cents": 358,
+      "applies_to": null
+    },
+    {
+      "type": "deposit",
+      "name": "Pfand",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": 25,
+      "applies_to": null
+    },
+    {
+      "type": "deposit_return",
+      "name": "Pfandrueckgabe",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": -25,
+      "applies_to": null
+    },
+    {
+      "type": "discount",
+      "name": "Rabatt Pizza",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": -40,
+      "applies_to": 4
+    }
+  ]
+}

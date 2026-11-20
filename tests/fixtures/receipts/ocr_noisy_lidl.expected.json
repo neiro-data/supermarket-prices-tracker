@@ -1,0 +1,27 @@
+{
+  "chain": "lidl",
+  "profile": "lidl",
+  "purchased_at": "2026-10-12T17:05:00",
+  "total_cents": 520,
+  "city": "Muenchen",
+  "lines": [
+    {
+      "type": "item",
+      "name": "Bananen",
+      "qty_milli": 566,
+      "unit": "kg",
+      "unit_price_cents": 199,
+      "total_cents": 113,
+      "applies_to": null
+    },
+    {
+      "type": "item",
+      "name": "Milbona Joghurt 0.49 B",
+      "qty_milli": 2000,
+      "unit": "pc",
+      "unit_price_cents": 179,
+      "total_cents": 358,
+      "applies_to": null
+    }
+  ]
+}

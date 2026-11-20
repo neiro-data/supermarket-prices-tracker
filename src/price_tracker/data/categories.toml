@@ -1,0 +1,241 @@
+# Seed taxonomy: two levels, slug = key. Edit freely; re-run `ptrack init` to apply.
+
+[categories.obst-gemuese]
+name_de = "Obst & Gemüse"
+name_en = "Fruit & Vegetables"
+
+[categories.obst-gemuese.children.obst]
+name_de = "Obst"
+name_en = "Fruit"
+
+[categories.obst-gemuese.children.gemuese]
+name_de = "Gemüse"
+name_en = "Vegetables"
+
+[categories.obst-gemuese.children.salat-kraeuter]
+name_de = "Salat & Kräuter"
+name_en = "Salad & Herbs"
+
+[categories.obst-gemuese.children.kartoffeln-zwiebeln]
+name_de = "Kartoffeln & Zwiebeln"
+name_en = "Potatoes & Onions"
+
+[categories.molkerei-eier]
+name_de = "Molkerei & Eier"
+name_en = "Dairy & Eggs"
+
+[categories.molkerei-eier.children.milch]
+name_de = "Milch"
+name_en = "Milk"
+
+[categories.molkerei-eier.children.joghurt-quark]
+name_de = "Joghurt & Quark"
+name_en = "Yogurt & Quark"
+
+[categories.molkerei-eier.children.kaese]
+name_de = "Käse"
+name_en = "Cheese"
+
+[categories.molkerei-eier.children.butter-margarine]
+name_de = "Butter & Margarine"
+name_en = "Butter & Margarine"
+
+[categories.molkerei-eier.children.sahne]
+name_de = "Sahne"
+name_en = "Cream"
+
+[categories.molkerei-eier.children.eier]
+name_de = "Eier"
+name_en = "Eggs"
+
+[categories.fleisch-fisch]
+name_de = "Fleisch & Fisch"
+name_en = "Meat & Fish"
+
+[categories.fleisch-fisch.children.fleisch]
+name_de = "Fleisch"
+name_en = "Meat"
+
+[categories.fleisch-fisch.children.gefluegel]
+name_de = "Geflügel"
+name_en = "Poultry"
+
+[categories.fleisch-fisch.children.wurst-aufschnitt]
+name_de = "Wurst & Aufschnitt"
+name_en = "Sausage & Cold Cuts"
+
+[categories.fleisch-fisch.children.fisch-meeresfruechte]
+name_de = "Fisch & Meeresfrüchte"
+name_en = "Fish & Seafood"
+
+[categories.brot-backwaren]
+name_de = "Brot & Backwaren"
+name_en = "Bread & Bakery"
+
+[categories.brot-backwaren.children.brot]
+name_de = "Brot"
+name_en = "Bread"
+
+[categories.brot-backwaren.children.broetchen]
+name_de = "Brötchen"
+name_en = "Rolls"
+
+[categories.brot-backwaren.children.kuchen-gebaeck]
+name_de = "Kuchen & Gebäck"
+name_en = "Cakes & Pastries"
+
+[categories.vorrat]
+name_de = "Vorrat"
+name_en = "Pantry"
+
+[categories.vorrat.children.nudeln-reis]
+name_de = "Nudeln & Reis"
+name_en = "Pasta & Rice"
+
+[categories.vorrat.children.mehl-backzutaten]
+name_de = "Mehl & Backzutaten"
+name_en = "Flour & Baking"
+
+[categories.vorrat.children.konserven]
+name_de = "Konserven"
+name_en = "Canned Goods"
+
+[categories.vorrat.children.saucen-gewuerze]
+name_de = "Saucen & Gewürze"
+name_en = "Sauces & Spices"
+
+[categories.vorrat.children.oel-essig]
+name_de = "Öl & Essig"
+name_en = "Oil & Vinegar"
+
+[categories.vorrat.children.muesli-cerealien]
+name_de = "Müsli & Cerealien"
+name_en = "Muesli & Cereals"
+
+[categories.vorrat.children.aufstriche]
+name_de = "Aufstriche"
+name_en = "Spreads"
+
+[categories.tiefkuehl]
+name_de = "Tiefkühl"
+name_en = "Frozen"
+
+[categories.tiefkuehl.children.tk-gemuese-obst]
+name_de = "TK Gemüse & Obst"
+name_en = "Frozen Vegetables & Fruit"
+
+[categories.tiefkuehl.children.tk-fertiggerichte]
+name_de = "TK Fertiggerichte"
+name_en = "Frozen Meals"
+
+[categories.tiefkuehl.children.eis]
+name_de = "Eis"
+name_en = "Ice Cream"
+
+[categories.snacks-suesses]
+name_de = "Snacks & Süßes"
+name_en = "Snacks & Sweets"
+
+[categories.snacks-suesses.children.schokolade-suesswaren]
+name_de = "Schokolade & Süßwaren"
+name_en = "Chocolate & Candy"
+
+[categories.snacks-suesses.children.kekse]
+name_de = "Kekse"
+name_en = "Biscuits"
+
+[categories.snacks-suesses.children.chips-nuesse]
+name_de = "Chips & Nüsse"
+name_en = "Chips & Nuts"
+
+[categories.getraenke]
+name_de = "Getränke"
+name_en = "Beverages"
+
+[categories.getraenke.children.wasser]
+name_de = "Wasser"
+name_en = "Water"
+
+[categories.getraenke.children.saefte]
+name_de = "Säfte"
+name_en = "Juices"
+
+[categories.getraenke.children.softdrinks]
+name_de = "Softdrinks"
+name_en = "Soft Drinks"
+
+[categories.getraenke.children.kaffee-tee]
+name_de = "Kaffee & Tee"
+name_en = "Coffee & Tea"
+
+[categories.getraenke.children.bier]
+name_de = "Bier"
+name_en = "Beer"
+
+[categories.getraenke.children.wein-spirituosen]
+name_de = "Wein & Spirituosen"
+name_en = "Wine & Spirits"
+
+[categories.drogerie]
+name_de = "Drogerie"
+name_en = "Drugstore"
+
+[categories.drogerie.children.koerperpflege]
+name_de = "Körperpflege"
+name_en = "Personal Care"
+
+[categories.drogerie.children.mundhygiene]
+name_de = "Mundhygiene"
+name_en = "Oral Care"
+
+[categories.drogerie.children.kosmetik]
+name_de = "Kosmetik"
+name_en = "Cosmetics"
+
+[categories.drogerie.children.baby]
+name_de = "Baby"
+name_en = "Baby"
+
+[categories.drogerie.children.gesundheit]
+name_de = "Gesundheit"
+name_en = "Health"
+
+[categories.haushalt]
+name_de = "Haushalt"
+name_en = "Household"
+
+[categories.haushalt.children.reinigung]
+name_de = "Reinigung"
+name_en = "Cleaning"
+
+[categories.haushalt.children.waschmittel]
+name_de = "Waschmittel"
+name_en = "Laundry"
+
+[categories.haushalt.children.papierwaren]
+name_de = "Papierwaren"
+name_en = "Paper Goods"
+
+[categories.tier]
+name_de = "Tierbedarf"
+name_en = "Pet Supplies"
+
+[categories.tier.children.tierfutter]
+name_de = "Tierfutter"
+name_en = "Pet Food"
+
+[categories.sonstiges]
+name_de = "Sonstiges"
+name_en = "Other"
+
+[categories.sonstiges.children.pfand]
+name_de = "Pfand"
+name_en = "Deposit"
+
+[categories.sonstiges.children.non-food]
+name_de = "Non-Food"
+name_en = "Non-Food"
+
+[categories.sonstiges.children.sonstiges-rest]
+name_de = "Sonstiges (Rest)"
+name_en = "Other (Misc)"

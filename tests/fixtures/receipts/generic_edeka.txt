@@ -1,0 +1,13 @@
+EDEKA Muster
+Hauptstr. 3
+10115 Berlin
+01.09.2026 12:30
+Nudeln 500g 1,29
+Joghurt 3 x 0,49 1,47
+Orangen
+0,820 kg x 2,49 EUR/kg 2,04
+Pfand EW 0,15
+Leergut -0,15
+Aktion Rabatt -0,20
+SUMME 4,60
+EC-Karte 4,60
