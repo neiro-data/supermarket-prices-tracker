@@ -7,10 +7,10 @@ from price_tracker.db.migrate import apply_migrations
 
 def test_apply_and_idempotent(tmp_path: Path) -> None:
     conn = connect(tmp_path / "m.db")
-    assert apply_migrations(conn) == [1, 2]
+    assert apply_migrations(conn) == [1, 2, 3]
     assert apply_migrations(conn) == []
     versions = [r["version"] for r in conn.execute("SELECT version FROM schema_migrations")]
-    assert versions == [1, 2]
+    assert versions == [1, 2, 3]
 
 
 def test_foreign_keys_on(db: sqlite3.Connection) -> None:

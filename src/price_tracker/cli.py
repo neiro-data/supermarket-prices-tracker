@@ -16,6 +16,7 @@ from price_tracker.config import load_settings
 from price_tracker.db.connection import connect
 from price_tracker.db.migrate import apply_migrations
 from price_tracker.db.seed import seed_categories, seed_chains
+from price_tracker.enrich.cli import enrich_app
 from price_tracker.ingest.extract import SUPPORTED_EXTS
 from price_tracker.ingest.ocr import TesseractEngine
 from price_tracker.ingest.service import IngestOutcome, ingest_file
@@ -38,6 +39,7 @@ app.add_typer(products_app, name="products")
 app.add_typer(alias_app, name="alias")
 app.add_typer(match_app, name="match")
 app.add_typer(report_app, name="report")
+app.add_typer(enrich_app, name="enrich")
 console = Console()
 
 
