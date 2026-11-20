@@ -9,7 +9,13 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "duckdb>=2.0.1",
+    "numpy>=2.5.5",
+    "opencv-python-headless>=5.1.0.95",
+    "pillow>=13.0.0",
+    "pillow-heif>=1.8.1",
     "polars>=2.1.0",
+    "pypdfium2>=5.15.2",
+    "pytesseract>=0.3.13",
     "python-dotenv>=1.2.4",
     "rich>=15.0.0",
     "typer>=0.29.2",
@@ -47,7 +53,7 @@ strict = true
 python_version = "3.12"
 
 [[tool.mypy.overrides]]
-module = ["pytesseract", "pypdfium2.*", "plotly.*", "rapidfuzz.*"]
+module = ["pytesseract", "pypdfium2.*", "plotly.*", "rapidfuzz.*", "cv2.*", "pillow_heif.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

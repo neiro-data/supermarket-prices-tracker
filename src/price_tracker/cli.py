@@ -1,6 +1,8 @@
 """`ptrack` command line interface."""
 
 from importlib import resources
+from pathlib import Path
+from typing import Annotated
 
 import typer
 from rich.console import Console
@@ -10,6 +12,9 @@ from price_tracker.config import load_settings
 from price_tracker.db.connection import connect
 from price_tracker.db.migrate import apply_migrations
 from price_tracker.db.seed import seed_categories, seed_chains
+from price_tracker.ingest.extract import SUPPORTED_EXTS
+from price_tracker.ingest.ocr import TesseractEngine
+from price_tracker.ingest.service import IngestOutcome, ingest_file
 
 app = typer.Typer(help="Supermarket price tracker.", no_args_is_help=True)
 db_app = typer.Typer(help="Database commands.", no_args_is_help=True)
@@ -67,3 +72,43 @@ def db_status() -> None:
     console.print(table)
     if not rows:
         console.print("No migrations applied. Run `ptrack init`.")
+
+
+def _expand(paths: list[Path]) -> list[Path]:
+    """Expand directories (non-recursively) to supported files, keeping explicit files."""
+    out: list[Path] = []
+    for p in paths:
+        if p.is_dir():
+            out.extend(
+                sorted(f for f in p.iterdir() if f.is_file() and f.suffix.lower() in SUPPORTED_EXTS)
+            )
+        else:
+            out.append(p)
+    return out
+
+
+@app.command()
+def ingest(
+    paths: Annotated[
+        list[Path] | None, typer.Argument(help="Files or directories (default: data/inbox).")
+    ] = None,
+    force: Annotated[bool, typer.Option("--force", help="Re-extract known files.")] = False,
+    dry_run: Annotated[bool, typer.Option("--dry-run", help="List files only.")] = False,
+) -> None:
+    """Extract text from receipt PDFs/photos and store each new file once."""
+    settings = load_settings()
+    files = _expand(paths or [settings.data_dir / "inbox"])
+    if dry_run:
+        for f in files:
+            console.print(str(f))
+        console.print(f"{len(files)} file(s) would be ingested.")
+        return
+    engine = TesseractEngine(settings.tesseract_cmd)
+    conn = connect(settings.db_path)
+    counts = {o: 0 for o in IngestOutcome}
+    try:
+        for f in files:
+            counts[ingest_file(conn, f, engine, settings.data_dir / "archive", force)] += 1
+    finally:
+        conn.close()
+    console.print(" ".join(f"{o.value}={n}" for o, n in counts.items()))
