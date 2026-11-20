@@ -65,7 +65,7 @@ automatically. Most receipts print article numbers, not EANs, so set EANs with
    `country_code`, `parser_profile`, `detect_keywords`).
 2. If the receipt layout is new, add a parser profile in `src/price_tracker/parsing/profiles/`
    (see `rewe.py`, `lidl.py`, `aldi.py`; `generic.py` is the fallback) and reference it
-   by `parser_profile`.
+   by `parser_profile`. Import the new module in `profiles/__init__.py` so it registers.
 3. Run `uv run ptrack init` to seed the chain, then add fixtures and tests.
 
 ## Testing
