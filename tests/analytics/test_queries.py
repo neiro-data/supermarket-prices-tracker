@@ -277,3 +277,21 @@ def test_attach_and_fallback_price_per_base_agree(analytics_db: Path) -> None:
     finally:
         con.close()
         fb.close()
+
+
+def test_empty_db_keeps_integer_dtypes(empty_con: duckdb.DuckDBPyConnection) -> None:
+    c = empty_con
+    frames = [
+        q.spend_over_time(c, "month"),
+        q.spend_by_category(c, 1),
+        q.spend_by_chain(c),
+        q.top_products(c, 5, "spend"),
+        q.price_evolution(c, 1),
+        q.cheapest_chain(c, date(2026, 1, 1)),
+    ]
+    for f in frames:
+        assert f.height == 0
+        for name, dtype in f.schema.items():
+            if name.endswith("_cents"):
+                assert dtype == pl.Int64, (name, dtype)
+            assert not isinstance(dtype, pl.Decimal) and dtype != pl.Null, (name, dtype)

@@ -257,9 +257,11 @@ Period = Literal["week", "month"]
 
 
 def _run(con: duckdb.DuckDBPyConnection, sql: str, params: list[object]) -> pl.DataFrame:
-    cur = con.execute(sql, params)
-    cols = [d[0] for d in cur.description]
-    return pl.DataFrame(cur.fetchall(), schema=cols, orient="row", infer_schema_length=None)
+    df: pl.DataFrame = con.sql(sql, params=params).pl()
+    # SUM(int) comes back as decimal[38,0]; keep integer cents.
+    return df.with_columns(
+        pl.col(name).cast(pl.Int64) for name, dt in df.schema.items() if dt == pl.Decimal(38, 0)
+    )
 
 
 def _range(since: date | None, until: date | None) -> list[object]:
