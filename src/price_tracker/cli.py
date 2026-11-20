@@ -8,6 +8,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from price_tracker.analytics.cli import report_app
 from price_tracker.config import load_settings
 from price_tracker.db.connection import connect
 from price_tracker.db.migrate import apply_migrations
@@ -33,6 +34,7 @@ app.add_typer(canonical_app, name="canonical")
 app.add_typer(products_app, name="products")
 app.add_typer(alias_app, name="alias")
 app.add_typer(match_app, name="match")
+app.add_typer(report_app, name="report")
 console = Console()
 
 
