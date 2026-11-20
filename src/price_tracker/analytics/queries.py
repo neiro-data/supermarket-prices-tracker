@@ -1,5 +1,6 @@
 """Analytics queries over confirmed/parsed receipts. Money stays in integer cents."""
 
+from collections.abc import Sequence
 from datetime import date, timedelta
 from typing import Literal
 
@@ -23,6 +24,10 @@ rr AS (
     FROM rcpt
     WHERE (CAST(? AS DATE) IS NULL OR purchased_on >= CAST(? AS DATE))
         AND (CAST(? AS DATE) IS NULL OR purchased_on <= CAST(? AS DATE))
+        AND (
+            CAST(? AS VARCHAR[]) IS NULL
+            OR chain_id IN (SELECT id FROM chain WHERE LIST_CONTAINS(CAST(? AS VARCHAR[]), code))
+        )
 )
 """
 
@@ -95,6 +100,30 @@ FROM totals AS t
 LEFT JOIN chain AS c ON c.id = t.chain_id
 GROUP BY 1, 2
 ORDER BY spend_cents DESC, chain_code
+"""  # noqa: S608
+
+SPEND_BY_STORE = f"""
+WITH {_RECEIPTS_CTE},
+totals AS (
+    SELECT rr.receipt_id, r.store_id, SUM(l.line_total_cents) AS spend_cents
+    FROM rr
+    INNER JOIN receipt AS r ON r.id = rr.receipt_id
+    INNER JOIN receipt_line AS l ON l.receipt_id = rr.receipt_id
+    GROUP BY rr.receipt_id, r.store_id
+)
+SELECT
+    COALESCE(c.name, 'Unknown') AS chain_name,
+    COALESCE(s.name, 'Unknown') AS store_name,
+    s.street,
+    s.postal_code,
+    COALESCE(s.country_code, 'unknown') AS country_code,
+    COUNT(*) AS receipts,
+    CAST(SUM(t.spend_cents) AS BIGINT) AS spend_cents
+FROM totals AS t
+LEFT JOIN store AS s ON s.id = t.store_id
+LEFT JOIN chain AS c ON c.id = s.chain_id
+GROUP BY 1, 2, 3, 4, 5
+ORDER BY spend_cents DESC, chain_name, store_name, s.street
 """  # noqa: S608
 
 SHOPPING_FREQUENCY = f"""
@@ -187,17 +216,18 @@ ORDER BY name, id
 
 PRICE_EVOLUTION = """
 SELECT
-    CAST(SUBSTRING(CAST(purchased_at AS VARCHAR) FROM 1 FOR 10) AS DATE) AS purchased_on,
-    chain_name,
-    store_city,
-    base_unit,
-    CAST(FLOOR(price_per_base_cents) AS BIGINT) AS price_per_base_cents
-FROM v_line_effective
-WHERE canonical_product_id = ?
-    AND price_per_base_cents IS NOT NULL
-    AND receipt_status IN ('confirmed', 'parsed')
-    AND purchased_at IS NOT NULL
-ORDER BY purchased_on, chain_name, line_id
+    CAST(SUBSTRING(CAST(v.purchased_at AS VARCHAR) FROM 1 FOR 10) AS DATE) AS purchased_on,
+    v.chain_name,
+    COALESCE(s.country_code, 'unknown') AS store_country,
+    v.base_unit,
+    CAST(FLOOR(v.price_per_base_cents) AS BIGINT) AS price_per_base_cents
+FROM v_line_effective AS v
+LEFT JOIN store AS s ON s.id = v.store_id
+WHERE v.canonical_product_id = ?
+    AND v.price_per_base_cents IS NOT NULL
+    AND v.receipt_status IN ('confirmed', 'parsed')
+    AND v.purchased_at IS NOT NULL
+ORDER BY purchased_on, v.chain_name, v.line_id
 """
 
 CHEAPEST_CHAIN = """
@@ -270,8 +300,11 @@ def _run(con: duckdb.DuckDBPyConnection, sql: str, params: list[object]) -> pl.D
     )
 
 
-def _range(since: date | None, until: date | None) -> list[object]:
-    return [since, since, until, until]
+def _range(
+    since: date | None, until: date | None, chains: Sequence[str] | None = None
+) -> list[object]:
+    codes = list(chains) if chains is not None else None
+    return [since, since, until, until, codes, codes]
 
 
 def spend_over_time(
@@ -279,9 +312,10 @@ def spend_over_time(
     period: Period = "month",
     since: date | None = None,
     until: date | None = None,
+    chains: Sequence[str] | None = None,
 ) -> pl.DataFrame:
     """Receipts and spend (cents) per week or month; sums all line types."""
-    return _run(con, SPEND_OVER_TIME, [*_range(since, until), period])
+    return _run(con, SPEND_OVER_TIME, [*_range(since, until, chains), period])
 
 
 def spend_by_category(
@@ -290,44 +324,79 @@ def spend_by_category(
     since: date | None = None,
     until: date | None = None,
     include_deposits: bool = False,
+    chains: Sequence[str] | None = None,
 ) -> pl.DataFrame:
     """Net item spend (discounts folded in) per category level; deposits optional."""
     sql = SPEND_BY_CATEGORY.replace("{deposits}", _CATEGORY_DEPOSITS if include_deposits else "")
-    return _run(con, sql, [*_range(since, until), level, level])
+    return _run(con, sql, [*_range(since, until, chains), level, level])
 
 
 def spend_by_chain(
-    con: duckdb.DuckDBPyConnection, since: date | None = None, until: date | None = None
+    con: duckdb.DuckDBPyConnection,
+    since: date | None = None,
+    until: date | None = None,
+    chains: Sequence[str] | None = None,
 ) -> pl.DataFrame:
     """Receipts and spend (cents) per chain."""
-    return _run(con, SPEND_BY_CHAIN, _range(since, until))
+    return _run(con, SPEND_BY_CHAIN, _range(since, until, chains))
 
 
-def shopping_frequency(con: duckdb.DuckDBPyConnection, period: Period = "week") -> pl.DataFrame:
+def spend_by_store(
+    con: duckdb.DuckDBPyConnection,
+    since: date | None = None,
+    until: date | None = None,
+    chains: Sequence[str] | None = None,
+) -> pl.DataFrame:
+    """Receipts and spend (cents) per store, with its country."""
+    return _run(con, SPEND_BY_STORE, _range(since, until, chains))
+
+
+def shopping_frequency(
+    con: duckdb.DuckDBPyConnection,
+    period: Period = "week",
+    since: date | None = None,
+    until: date | None = None,
+    chains: Sequence[str] | None = None,
+) -> pl.DataFrame:
     """Trips per period plus the overall average days between trips."""
-    return _run(con, SHOPPING_FREQUENCY, [*_range(None, None), period])
+    return _run(con, SHOPPING_FREQUENCY, [*_range(since, until, chains), period])
 
 
-def weekday_profile(con: duckdb.DuckDBPyConnection) -> pl.DataFrame:
+def weekday_profile(
+    con: duckdb.DuckDBPyConnection,
+    since: date | None = None,
+    until: date | None = None,
+    chains: Sequence[str] | None = None,
+) -> pl.DataFrame:
     """Trips and spend by ISO weekday (1=Mon) and hour bucket."""
-    return _run(con, WEEKDAY_PROFILE, _range(None, None))
+    return _run(con, WEEKDAY_PROFILE, _range(since, until, chains))
 
 
-def basket_size(con: duckdb.DuckDBPyConnection) -> pl.DataFrame:
+def basket_size(
+    con: duckdb.DuckDBPyConnection,
+    since: date | None = None,
+    until: date | None = None,
+    chains: Sequence[str] | None = None,
+) -> pl.DataFrame:
     """Item count and spend in cents per receipt."""
-    return _run(con, BASKET_SIZE, _range(None, None))
+    return _run(con, BASKET_SIZE, _range(since, until, chains))
 
 
 def top_products(
-    con: duckdb.DuckDBPyConnection, n: int = 20, by: Literal["spend", "count"] = "spend"
+    con: duckdb.DuckDBPyConnection,
+    n: int = 20,
+    by: Literal["spend", "count"] = "spend",
+    since: date | None = None,
+    until: date | None = None,
+    chains: Sequence[str] | None = None,
 ) -> pl.DataFrame:
     """Top `n` products (canonical name, else chain product name) by spend or purchase count."""
     order = "spend_cents DESC" if by == "spend" else "purchases DESC, spend_cents DESC"
-    return _run(con, _TOP_PRODUCTS.replace("{order}", order), [*_range(None, None), n])
+    return _run(con, _TOP_PRODUCTS.replace("{order}", order), [*_range(since, until, chains), n])
 
 
 def price_evolution(con: duckdb.DuckDBPyConnection, canonical_id: int) -> pl.DataFrame:
-    """Price per base unit (cents) over time, by chain and city."""
+    """Price per base unit (cents) over time, by chain and store country."""
     return _run(con, PRICE_EVOLUTION, [canonical_id])
 
 

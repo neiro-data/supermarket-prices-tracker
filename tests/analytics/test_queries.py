@@ -100,12 +100,14 @@ def test_top_products(con: duckdb.DuckDBPyConnection) -> None:
 
 def test_price_evolution(con: duckdb.DuckDBPyConnection) -> None:
     df = q.price_evolution(con, 2)  # canonical ids: 1 = milk, 2 = apples
-    assert df.select("purchased_on", "chain_name", "store_city", "price_per_base_cents").rows() == [
-        (date(2026, 1, 5), "REWE", "Berlin", 500),
-        (date(2026, 1, 19), "ALDI SÜD", "Muenchen", 300),
-        (date(2026, 1, 26), "Lidl", "Berlin", 500),
-        (date(2026, 2, 9), "ALDI SÜD", "Muenchen", 350),
-        (date(2026, 2, 16), "REWE", "Berlin", 600),
+    assert df.select(
+        "purchased_on", "chain_name", "store_country", "price_per_base_cents"
+    ).rows() == [
+        (date(2026, 1, 5), "REWE", "DE", 500),
+        (date(2026, 1, 19), "ALDI SÜD", "DE", 300),
+        (date(2026, 1, 26), "Lidl", "DE", 500),
+        (date(2026, 2, 9), "ALDI SÜD", "DE", 350),
+        (date(2026, 2, 16), "REWE", "DE", 600),
     ]
     assert set(df["base_unit"].to_list()) == {"kg"}
     assert q.price_evolution(con, 1)["price_per_base_cents"].to_list() == [
@@ -295,3 +297,13 @@ def test_empty_db_keeps_integer_dtypes(empty_con: duckdb.DuckDBPyConnection) -> 
             if name.endswith("_cents"):
                 assert dtype == pl.Int64, (name, dtype)
             assert not isinstance(dtype, pl.Decimal) and dtype != pl.Null, (name, dtype)
+
+
+def test_chain_filter_and_store_breakdown(con: duckdb.DuckDBPyConnection) -> None:
+    only_lidl = q.spend_by_chain(con, chains=["lidl"])
+    assert only_lidl["chain_code"].to_list() == ["lidl"]
+    assert q.spend_by_chain(con, chains=["lidl"])["receipts"].to_list() == [4]
+    assert q.basket_size(con, chains=["lidl"]).height == 4
+    stores = q.spend_by_store(con)
+    assert stores["receipts"].sum() == q.spend_by_chain(con)["receipts"].sum()
+    assert set(stores["country_code"].to_list()) == {"DE"}
