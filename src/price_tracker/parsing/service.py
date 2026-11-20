@@ -1,7 +1,6 @@
 """Persist parsed receipts: chain/store lookup, receipt + lines, chain_product links."""
 
 import logging
-import re
 import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -12,6 +11,9 @@ from price_tracker.parsing import profiles as _profiles  # noqa: F401  (register
 from price_tracker.parsing.base import PARSERS
 from price_tracker.parsing.detect import ChainInfo, detect_chain, load_chain_infos
 from price_tracker.parsing.validate import assess
+from price_tracker.products.matching import auto_match_all
+from price_tracker.products.normalize import identity_key
+from price_tracker.products.units import parse_pack_size
 
 logger = logging.getLogger(__name__)
 
@@ -32,25 +34,28 @@ def now_utc() -> str:
     return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S")
 
 
-def normalize_stub(raw: str) -> str:
-    """Minimal name normalizer (M4 replaces it): lowercase, drop punctuation, collapse spaces."""
-    return re.sub(r"\s+", " ", re.sub(r"[^\w%]+", " ", raw.lower())).strip()
-
-
 def get_or_create_chain_product(
     conn: sqlite3.Connection, chain_id: int, raw_name: str, is_weighed: bool
 ) -> int:
-    norm = normalize_stub(raw_name)
+    norm = identity_key(raw_name)
     row = conn.execute(
         "SELECT id FROM chain_product WHERE chain_id = ? AND normalized_name = ?",
         (chain_id, norm),
     ).fetchone()
     if row is not None:
         return int(row["id"])
+    pack = parse_pack_size(raw_name)
     cur = conn.execute(
-        "INSERT INTO chain_product (chain_id, raw_name, normalized_name, is_weighed) "
-        "VALUES (?, ?, ?, ?)",
-        (chain_id, raw_name, norm, int(is_weighed)),
+        "INSERT INTO chain_product (chain_id, raw_name, normalized_name, is_weighed, "
+        "pack_size_milli, pack_unit) VALUES (?, ?, ?, ?, ?, ?)",
+        (
+            chain_id,
+            raw_name,
+            norm,
+            int(is_weighed),
+            pack.amount_milli if pack else None,
+            pack.unit.value if pack else None,
+        ),
     )
     return int(cur.lastrowid or 0)
 
@@ -163,4 +168,5 @@ def parse_source_file(conn: sqlite3.Connection, source_file_id: int) -> int:
                     ln.applies_to_line_no,
                 ),
             )
+        auto_match_all(conn)
     return receipt_id

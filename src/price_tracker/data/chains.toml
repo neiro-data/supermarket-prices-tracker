@@ -1,0 +1,71 @@
+# Supported chains. Add a country by adding rows with its country_code.
+
+[[chains]]
+code = "rewe"
+name = "REWE"
+country_code = "DE"
+parser_profile = "rewe"
+detect_keywords = ["rewe"]
+
+[[chains]]
+code = "lidl"
+name = "Lidl"
+country_code = "DE"
+parser_profile = "lidl"
+detect_keywords = ["lidl"]
+
+[[chains]]
+code = "aldi_sued"
+name = "ALDI SÜD"
+country_code = "DE"
+parser_profile = "aldi"
+detect_keywords = ["aldi sued", "aldi süd"]
+
+[[chains]]
+code = "aldi_nord"
+name = "ALDI Nord"
+country_code = "DE"
+parser_profile = "aldi"
+detect_keywords = ["aldi nord"]
+
+[[chains]]
+code = "edeka"
+name = "EDEKA"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["edeka"]
+
+[[chains]]
+code = "kaufland"
+name = "Kaufland"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["kaufland"]
+
+[[chains]]
+code = "penny"
+name = "PENNY"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["penny"]
+
+[[chains]]
+code = "netto"
+name = "Netto"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["netto marken-discount", "netto"]
+
+[[chains]]
+code = "dm"
+name = "dm-drogerie markt"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["dm-drogerie", "dm drogerie"]
+
+[[chains]]
+code = "rossmann"
+name = "Rossmann"
+country_code = "DE"
+parser_profile = "generic"
+detect_keywords = ["rossmann"]

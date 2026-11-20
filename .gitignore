@@ -36,5 +36,5 @@ htmlcov/
 claude_interaction_steps.md
 
 # Project data
-data/
+/data/
 *.db

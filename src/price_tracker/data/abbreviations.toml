@@ -1,0 +1,13 @@
+# Receipt abbreviation expansion, applied per token to the folded (lowercase, ae/oe/ue/ss) name.
+# Keys may contain a hyphen. Edit freely.
+
+[abbreviations]
+"h-milch" = "haltbare milch"
+hmilch = "haltbare milch"
+vollm = "vollmilch"
+tafeltr = "tafeltrauben"
+kernl = "kernlos"
+bio = "bio"
+jog = "joghurt"
+mozz = "mozzarella"
+tk = "tiefkuehl"

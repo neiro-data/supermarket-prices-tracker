@@ -38,6 +38,11 @@ def test_parse_stores_receipt_lines_and_products(cli_db: sqlite3.Connection) -> 
     assert r["store_id"] is not None
     n_products = cli_db.execute("SELECT COUNT(*) AS n FROM chain_product").fetchone()["n"]
     assert n_products == 4  # items only
+    deposits = cli_db.execute(
+        "SELECT COUNT(*) AS n FROM receipt_line "
+        "WHERE line_type LIKE 'deposit%' AND chain_product_id IS NULL"
+    ).fetchone()["n"]
+    assert deposits == 2
 
 
 def test_set_line_accept_flow(cli_db: sqlite3.Connection) -> None:
