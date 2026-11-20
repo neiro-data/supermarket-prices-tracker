@@ -15,10 +15,12 @@ from price_tracker.db.seed import seed_categories, seed_chains
 from price_tracker.ingest.extract import SUPPORTED_EXTS
 from price_tracker.ingest.ocr import TesseractEngine
 from price_tracker.ingest.service import IngestOutcome, ingest_file
+from price_tracker.review.cli import review_app
 
 app = typer.Typer(help="Supermarket price tracker.", no_args_is_help=True)
 db_app = typer.Typer(help="Database commands.", no_args_is_help=True)
 app.add_typer(db_app, name="db")
+app.add_typer(review_app, name="review")
 console = Console()
 
 

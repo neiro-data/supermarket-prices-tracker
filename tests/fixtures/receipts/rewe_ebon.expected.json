@@ -1,0 +1,72 @@
+{
+  "chain": "rewe",
+  "profile": "rewe",
+  "purchased_at": "2026-11-20T18:42:00",
+  "total_cents": 765,
+  "city": "Koeln",
+  "lines": [
+    {
+      "type": "item",
+      "name": "H-MILCH 3,5%",
+      "qty_milli": 2000,
+      "unit": "pc",
+      "unit_price_cents": 89,
+      "total_cents": 178,
+      "applies_to": null
+    },
+    {
+      "type": "item",
+      "name": "KARTOFFELN FESTK.",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": 249,
+      "applies_to": null
+    },
+    {
+      "type": "item",
+      "name": "TAFELTR.HELL KERNL",
+      "qty_milli": 566,
+      "unit": "kg",
+      "unit_price_cents": 299,
+      "total_cents": 169,
+      "applies_to": null
+    },
+    {
+      "type": "item",
+      "name": "BIO BANANEN",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": 199,
+      "applies_to": null
+    },
+    {
+      "type": "deposit",
+      "name": "PFAND 0,25 EUR",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": 25,
+      "applies_to": null
+    },
+    {
+      "type": "deposit_return",
+      "name": "Leergutbon",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": -25,
+      "applies_to": null
+    },
+    {
+      "type": "discount",
+      "name": "Preisvorteil",
+      "qty_milli": 1000,
+      "unit": "pc",
+      "unit_price_cents": null,
+      "total_cents": -30,
+      "applies_to": 4
+    }
+  ]
+}

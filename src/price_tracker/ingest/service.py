@@ -10,6 +10,7 @@ from pathlib import Path
 from price_tracker.ingest.extract import extract
 from price_tracker.ingest.hashing import sha256_file
 from price_tracker.ingest.ocr import OcrEngine
+from price_tracker.parsing.service import parse_source_file
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +63,10 @@ def ingest_file(
                     now,
                 ),
             )
+        source_id = conn.execute(
+            "SELECT id FROM source_file WHERE sha256 = ?", (digest,)
+        ).fetchone()["id"]
+        parse_source_file(conn, int(source_id))
         return IngestOutcome.NEW
     except (OSError, ValueError, RuntimeError, sqlite3.Error) as e:
         logger.warning("ingest failed for %s: %s", path, e)

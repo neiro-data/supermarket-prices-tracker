@@ -38,6 +38,7 @@ class ParsedLine:
     vat_code: str | None = None
     applies_to_line_no: int | None = None
     article_no: str | None = None
+    name: str = ""
 
 
 @dataclass(frozen=True, slots=True)
