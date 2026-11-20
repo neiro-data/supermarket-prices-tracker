@@ -9,7 +9,7 @@ from price_tracker.db.seed import seed_categories, seed_chains
 
 def test_counts(db: sqlite3.Connection) -> None:
     assert db.execute("SELECT COUNT(*) FROM category WHERE parent_id IS NULL").fetchone()[0] == 12
-    assert db.execute("SELECT COUNT(*) FROM chain").fetchone()[0] == 10
+    assert db.execute("SELECT COUNT(*) FROM chain").fetchone()[0] == 21
     assert db.execute("SELECT COUNT(*) FROM category WHERE slug = 'pfand'").fetchone()[0] == 1
 
 
@@ -27,7 +27,7 @@ def test_rerun_no_dupes(db: sqlite3.Connection) -> None:
     seed_categories(db, Path(str(data.joinpath("categories.toml"))))
     seed_chains(db, Path(str(data.joinpath("chains.toml"))))
     assert db.execute("SELECT COUNT(*) FROM category").fetchone()[0] == before
-    assert db.execute("SELECT COUNT(*) FROM chain").fetchone()[0] == 10
+    assert db.execute("SELECT COUNT(*) FROM chain").fetchone()[0] == 21
 
 
 def test_failed_seed_rolls_back(db: sqlite3.Connection, tmp_path: Path) -> None:

@@ -28,3 +28,18 @@ def test_keyword_beyond_header_ignored() -> None:
 def test_aldi_profiles() -> None:
     found = detect_chain("ALDI SÜD", load_chain_infos())
     assert found is not None and found.parser_profile == "aldi"
+
+
+@pytest.mark.parametrize(
+    ("text", "code"),
+    [
+        ("Lidl Portugal\nNIF 503340855", "lidl_pt"),
+        ("PINGO DOCE\nIVA", "pingo_doce"),
+        ("Continente Modelo", "continente"),
+        ("Minipreço", "minipreco"),
+    ],
+)
+def test_portuguese_chains(text: str, code: str) -> None:
+    found = detect_chain(text, load_chain_infos())
+    assert found is not None
+    assert found.code == code
