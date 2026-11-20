@@ -179,6 +179,12 @@ ORDER BY {{order}}, product_name
 LIMIT ?
 """  # noqa: S608
 
+CANONICAL_PRODUCTS = """
+SELECT id AS canonical_id, name AS product_name, base_unit
+FROM canonical_product
+ORDER BY name, id
+"""
+
 PRICE_EVOLUTION = """
 SELECT
     CAST(SUBSTRING(CAST(purchased_at AS VARCHAR) FROM 1 FOR 10) AS DATE) AS purchased_on,
@@ -332,3 +338,8 @@ def cheapest_chain(con: duckdb.DuckDBPyConnection, since: date | None = None) ->
     """
     start = since if since is not None else date.today() - timedelta(days=90)
     return _run(con, CHEAPEST_CHAIN, [start])
+
+
+def canonical_products(con: duckdb.DuckDBPyConnection) -> pl.DataFrame:
+    """All canonical products (id, name, base unit) for selectors."""
+    return _run(con, CANONICAL_PRODUCTS, [])

@@ -21,6 +21,7 @@ dependencies = [
     "python-dotenv>=1.2.4",
     "rapidfuzz>=3.14.6",
     "rich>=15.0.0",
+    "streamlit>=1.67.0",
     "typer>=0.29.2",
 ]
 

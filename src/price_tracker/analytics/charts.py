@@ -79,6 +79,24 @@ def weekday_profile_chart(df: pl.DataFrame) -> go.Figure:
     return _layout(fig, "Spend by weekday", "Weekday", "Spend (EUR)")
 
 
+def weekday_heatmap_chart(df: pl.DataFrame) -> go.Figure:
+    """Trips by weekday (columns) and hour bucket (rows)."""
+    buckets = sorted(df["hour_bucket"].unique().to_list())
+    z = [
+        [
+            int(
+                df.filter((pl.col("hour_bucket") == b) & (pl.col("iso_weekday") == d))[
+                    "trips"
+                ].sum()
+            )
+            for d in range(1, 8)
+        ]
+        for b in buckets
+    ]
+    fig = go.Figure(go.Heatmap(z=z, x=list(_WEEKDAYS), y=buckets, colorscale="Blues"))
+    return _layout(fig, "Trips by weekday and time of day", "Weekday", "Time of day")
+
+
 def basket_size_chart(df: pl.DataFrame) -> go.Figure:
     """Distribution of basket value per receipt."""
     fig = go.Figure(go.Histogram(x=_eur(df["spend_cents"].to_list()), marker_color=PALETTE[0]))

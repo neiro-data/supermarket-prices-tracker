@@ -13,6 +13,7 @@ RELATIONS: tuple[str, ...] = (
     "chain",
     "store",
     "category",
+    "canonical_product",
 )
 
 

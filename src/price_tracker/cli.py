@@ -1,5 +1,8 @@
 """`ptrack` command line interface."""
 
+import os
+import subprocess  # noqa: S404  # fixed argv, no shell
+import sys
 from importlib import resources
 from pathlib import Path
 from typing import Annotated
@@ -128,3 +131,18 @@ def ingest(
     finally:
         conn.close()
     console.print(" ".join(f"{o.value}={n}" for o, n in counts.items()))
+
+
+@app.command()
+def dashboard(
+    port: Annotated[int, typer.Option(help="Port to serve on.")] = 8501,
+) -> None:
+    """Serve the Streamlit dashboard (read-only) on localhost."""
+    settings = load_settings()
+    os.environ["PTRACK_DB_PATH"] = str(settings.db_path)
+    app_path = Path(__file__).parent / "dashboard" / "app.py"
+    # Fixed argv (no user-controlled strings besides the int port), no shell.
+    subprocess.run(  # noqa: S603
+        [sys.executable, "-m", "streamlit", "run", str(app_path), "--server.port", str(port)],
+        check=True,
+    )
